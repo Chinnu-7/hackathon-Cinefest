@@ -1,4 +1,12 @@
-# React + Vite
+# Cinefest - Cinema Management System
+
+Welcome to Cinefest, a modern cinefest platform for film analysis, planning, and management.
+
+## Features
+- Script Analysis
+- Visual Planning
+- Multi-step Production Workflows
+
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
