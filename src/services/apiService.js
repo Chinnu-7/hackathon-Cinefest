@@ -4,7 +4,7 @@
  * To integrate with a real backend, replace the base URL and mock delays.
  */
 
-const API_BASE_URL = 'http://localhost:5000/api'; // Change to your production URL
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const handleResponse = async (response) => {
     if (!response.ok) {
