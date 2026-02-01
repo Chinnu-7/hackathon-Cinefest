@@ -1,11 +1,17 @@
-import React from 'react';
-import { User, AlertTriangle, CheckCircle2, History, Shirt, Zap } from 'lucide-react';
+import React, { useState } from 'react';
+import { User, AlertTriangle, CheckCircle2, History, Shirt, Zap, Loader2, Search, FileDown, ArrowLeft } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useApp } from '../context/AppContext';
 
 const Continuity = () => {
+    const { navigateTo } = useApp();
+    const [isScanning, setIsScanning] = useState(false);
+    const [scanResults, setScanResults] = useState(null);
+
     const characters = [
-        { name: 'Elias', status: 'Inconsistent', alerts: 1, lastScene: 'Scene 14', role: 'Lead' },
-        { name: 'Sarah', status: 'Consistent', alerts: 0, lastScene: 'Scene 12', role: 'Support' },
-        { name: 'The Guard', status: 'Consistent', alerts: 0, lastScene: 'Scene 04', role: 'Minor' },
+        { name: 'Elias', status: 'Inconsistent', alerts: 1, lastScene: 'Scene 14', role: 'Lead', color: 'var(--primary)' },
+        { name: 'Sarah', status: 'Consistent', alerts: 0, lastScene: 'Scene 12', role: 'Support', color: 'var(--secondary)' },
+        { name: 'The Guard', status: 'Consistent', alerts: 0, lastScene: 'Scene 04', role: 'Minor', color: '#a1a1aa' },
     ];
 
     const comparisons = [
@@ -27,20 +33,71 @@ const Continuity = () => {
         }
     ];
 
+    const handleScan = () => {
+        setIsScanning(true);
+        setTimeout(() => {
+            setIsScanning(false);
+            setScanResults('Scan Complete: 1 conflict detected in Elias (Scene 14).');
+        }, 2500);
+    };
+
     return (
         <div className="animate-in">
             <header className="dashboard-header">
-                <div>
-                    <h1 className="gradient-text">Character Continuity</h1>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem' }}>AI-Powered appearance tracking across shots, takes and scenes</p>
+                <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+                    <button
+                        className="btn-back"
+                        onClick={() => navigateTo('dashboard')}
+                    >
+                        <ArrowLeft size={20} />
+                    </button>
+                    <div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--primary)', marginBottom: '4px' }}>
+                            <Search size={16} />
+                            <span style={{ fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Visual Continuity Guard</span>
+                        </div>
+                        <h1 className="gradient-text">Character Continuity</h1>
+                        <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem' }}>AI-Powered appearance tracking and wardrobe verification across production days.</p>
+                    </div>
+                </div>
+                <div style={{ display: 'flex', gap: '1rem' }}>
+                    <button className="btn btn-outline" onClick={() => alert('Generating Daily Consistency Report...')}>
+                        <FileDown size={18} /> Export Journal
+                    </button>
+                    <button className={`btn btn-primary ${isScanning ? 'loading' : ''}`} onClick={handleScan} disabled={isScanning}>
+                        {isScanning ? <Loader2 size={18} className="animate-spin" /> : <Zap size={18} />}
+                        {isScanning ? 'Scanning Rushes...' : 'Run Neural Audit'}
+                    </button>
                 </div>
             </header>
 
+            <AnimatePresence>
+                {isScanning && (
+                    <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        style={{ marginBottom: '2rem' }}
+                    >
+                        <div className="glass-card" style={{ background: 'rgba(192, 132, 252, 0.05)', border: '1px solid var(--primary)', textAlign: 'center', padding: '2rem' }}>
+                            <div className="scan-animation" style={{ margin: '0 auto 1rem', width: '100px', height: '40px' }}>
+                                <div className="scan-bar" />
+                            </div>
+                            <p style={{ color: 'var(--primary)', fontWeight: 600 }}>Analyzing frame embeddings for character Elias...</p>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             <div className="grid grid-cols-3" style={{ marginBottom: '3rem' }}>
                 {characters.map((char, i) => (
-                    <div key={i} className="glass-card stat-card">
+                    <motion.div
+                        key={i}
+                        whileHover={{ scale: 1.02 }}
+                        className="glass-card stat-card"
+                    >
                         <div className="stat-header">
-                            <div className="stat-icon-box" style={{ color: 'var(--primary)' }}>
+                            <div className="stat-icon-box" style={{ color: char.color, background: `${char.color}15` }}>
                                 <User size={24} />
                             </div>
                             <span className={`badge ${char.alerts > 0 ? 'badge-high' : 'badge-low'}`}>
@@ -49,7 +106,7 @@ const Continuity = () => {
                         </div>
                         <h3 style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>{char.name}</h3>
                         <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{char.role} • Last seen in {char.lastScene}</p>
-                    </div>
+                    </motion.div>
                 ))}
             </div>
 
@@ -58,21 +115,29 @@ const Continuity = () => {
                     <h3 style={{ fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <History size={24} color="var(--primary)" /> Continuity Live-Feed
                     </h3>
-                    <button className="btn btn-outline" style={{ height: '40px' }}>Historical Logs</button>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                        <span className="badge" style={{ background: 'rgba(255,255,255,0.05)' }}>LAST AUDIT: 4 MINS AGO</span>
+                    </div>
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     {comparisons.map((item, i) => (
-                        <div key={i} style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            padding: '20px',
-                            background: 'rgba(255,255,255,0.02)',
-                            borderRadius: '20px',
-                            border: `1px solid ${item.status === 'Conflict' ? 'rgba(251, 113, 133, 0.2)' : 'var(--card-border)'}`,
-                            transition: 'var(--transition)'
-                        }}>
+                        <motion.div
+                            key={i}
+                            initial={{ x: -20, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            transition={{ delay: i * 0.1 }}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                padding: '20px',
+                                background: 'rgba(255,255,255,0.02)',
+                                borderRadius: '20px',
+                                border: `1px solid ${item.status === 'Conflict' ? 'rgba(251, 113, 133, 0.2)' : 'var(--card-border)'}`,
+                                transition: 'var(--transition)'
+                            }}
+                        >
                             <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
                                 <div style={{
                                     width: '56px',
@@ -98,11 +163,11 @@ const Continuity = () => {
                                 <span className={`badge ${item.status === 'Conflict' ? 'badge-high' : 'badge-low'}`} style={{ fontSize: '0.75rem' }}>
                                     {item.desc}
                                 </span>
-                                <button className="btn btn-outline" style={{ height: '36px', fontSize: '0.8rem', padding: '0 16px' }}>
+                                <button className="btn btn-outline" style={{ height: '36px', fontSize: '0.8rem', padding: '0 16px' }} onClick={() => alert(item.status === 'Conflict' ? 'Incident Report Generated' : 'Opening Frames...')}>
                                     {item.status === 'Conflict' ? 'Generate Incident Report' : 'Review Frames'}
                                 </button>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
             </div>
@@ -134,6 +199,5 @@ const Continuity = () => {
         </div>
     );
 };
-
 
 export default Continuity;
