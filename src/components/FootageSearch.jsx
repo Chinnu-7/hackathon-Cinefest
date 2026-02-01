@@ -1,31 +1,43 @@
 import React, { useState } from 'react';
-import { Search, Play, Clock, Filter, List, Loader2 } from 'lucide-react';
+import { Search, Play, Clock, Filter, List, Loader2, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useApp } from '../context/AppContext';
+import { apiService } from '../services/apiService';
 
 const FootageSearch = () => {
+    const { navigateTo } = useApp();
     const [query, setQuery] = useState('');
     const [isSearching, setIsSearching] = useState(false);
 
-    const results = [
-        { timestamp: '00:14:22', description: 'Elias enters the subway with a black coat', thumbnail: 'https://images.unsplash.com/photo-1514467953516-ec483e58c65f?auto=format&fit=crop&w=400&q=80' },
-        { timestamp: '00:21:05', description: 'Close up of the mysterious briefcase', thumbnail: 'https://images.unsplash.com/photo-1543269664-76bc3997d9ea?auto=format&fit=crop&w=400&q=80' },
-        { timestamp: '01:05:44', description: 'The train departing into the tunnel', thumbnail: 'https://images.unsplash.com/photo-1474487056269-ac41b32bb398?auto=format&fit=crop&w=400&q=80' },
-    ];
+    const [results, setResults] = useState([]);
 
-    const handleSearch = () => {
+    const handleSearch = async () => {
         if (!query) return;
         setIsSearching(true);
-        setTimeout(() => {
+        try {
+            const data = await apiService.vision.searchFootage(query);
+            setResults(data.results || []);
+        } catch (err) {
+            console.error("Search failed", err);
+        } finally {
             setIsSearching(false);
-        }, 1500);
+        }
     };
 
     return (
         <div className="animate-in">
             <header className="dashboard-header">
-                <div>
-                    <h1 className="gradient-text">Semantic Footage Search</h1>
-                    <p style={{ color: 'var(--text-muted)' }}>Search raw takes using natural language descriptions</p>
+                <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+                    <button
+                        className="btn-back"
+                        onClick={() => navigateTo('dashboard')}
+                    >
+                        <ArrowLeft size={20} />
+                    </button>
+                    <div>
+                        <h1 className="gradient-text">Semantic Footage Search</h1>
+                        <p style={{ color: 'var(--text-muted)' }}>Search raw takes using natural language descriptions</p>
+                    </div>
                 </div>
             </header>
 
