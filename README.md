@@ -1,24 +1,94 @@
-# Cinefest - Cinema Management System
+# 🎬 CineMind: Neural Film Production Suite
 
-Welcome to Cinefest, a modern cinefest platform for film analysis, planning, and management.
+**Transforming Script into Cinema with Generative Intelligence & Persistent Data.**
 
-## Features
-- Script Analysis
-- Visual Planning
-- Multi-step Production Workflows
+CineMind is a state-of-the-art AI-powered platform designed for directors, cinematographers, and production designers. It bridges the gap between raw script text and visual execution by leveraging Large Language Models (LLMs) and persistent MySQL data layers.
 
+---
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🚀 Key Modules
 
-Currently, two official plugins are available:
+### 🧠 Script Intelligence
+Upload `.pdf` or `.fdx` scripts for automated **Narrative DNA Extraction**. Identifies characters, locations, and calculates technical risk scores using backend processing.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### ⚡ Scene Intent Engine
+Extract internal creative intent. Input scene snippets to retrieve:
+- **Atmospheric Temperature**: Visual tone and lighting mood.
+- **Narrative Subtext**: Hidden emotional beats.
+- **Planning Signals**: Suggested camera movements and soundscapes.
 
-## React Compiler
+### 🎥 AI Video Previz
+The future of storyboarding. High-fidelity rendering simulations that convert scene descriptions into animated neural previews with integrated timecodes and technical overlays.
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+### 🗄️ Production History
+Full persistence layer. Every analysis, every script upload, and every creative decision is timestamped and stored in a **MySQL Database** for cross-session recovery.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Technology Stack
+
+| Layer | Technology |
+| :--- | :--- |
+| **Frontend** | React 18, Framer Motion, Lucide React |
+| **Styling** | Modern CSS Variables, Glassmorphism architecture |
+| **Backend** | Node.js, Express.js |
+| **Database** | MySQL (with automated schema initialization) |
+| **AI Integration** | OpenAI GPT-4 / 3.5 Turbo |
+| **File Handling** | Multer (Multipart/form-data) |
+
+---
+
+## ⚙️ Setup & Installation
+
+### 1. Prerequisites
+- Node.js (v18+)
+- MySQL Server
+
+### 2. Frontend Setup
+```bash
+npm install
+npm run dev
+```
+
+### 3. Backend Setup
+Navigate to the `server` directory:
+```bash
+cd server
+npm install
+```
+
+Create a `.env` file in the `server` directory:
+```env
+PORT=5000
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_mysql_password
+DB_NAME=cinemind
+OPENAI_API_KEY=your_openai_key_here
+```
+
+### 4. Running the Project
+Launch the backend:
+```bash
+node server/index.js
+```
+
+The system will automatically initialize the `cinemind` database and all required tables (`users`, `script_analysis`) upon first connection.
+
+---
+
+## 🎨 Design Philosophy
+CineMind utilizes a **"Neo-Noir"** aesthetic:
+- **Deep Space Palette**: Using `#0a0a0c` base with neon `#c084fc` and `#6366f1` accents.
+- **Glassmorphism**: High-blur backdrops for premium depth.
+- **Atomic Components**: Fully responsive, data-driven UI widgets.
+
+---
+
+## 🏆 Hackathon Highlights
+- **Real-time Persistence**: Unlike typical prototypes, CineMind saves data to a real database.
+- **Hybrid AI Logic**: Seamlessly falls back to high-quality mock data if API limits are reached.
+- **Full-Stack Synergy**: Cohesive communication between React and Express via a custom `apiService` layer.
+
+---
+*Created with ❤️ by the CineMind Team.*
